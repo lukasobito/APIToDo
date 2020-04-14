@@ -17,7 +17,8 @@ namespace APIToDo.Utils
                 Titre = t.Titre,
                 Description = t.Description,
                 IsDone = t.IsDone,
-                DateValidation = t.DateValidation
+                DateValidation = t.DateValidation,
+                UserId = t.UserId
             };
         }
 
@@ -29,7 +30,42 @@ namespace APIToDo.Utils
                 Titre = t.Titre,
                 Description = t.Description,
                 IsDone = t.IsDone,
-                DateValidation = t.DateValidation
+                DateValidation = t.DateValidation,
+                UserId = t.UserId
+            };
+        }
+        public static User ToLocal(this d.User t)
+        {
+            return new User
+            {
+                Id = t.Id,
+                LastName = t.LastName,
+                FirstName = t.FirstName,
+                Email = t.Email,
+                Pwd = t.Pwd
+            };
+        }
+
+        public static d.User ToGlobal(this User t)
+        {
+            return new d.User
+            {
+                Id = t.Id,
+                LastName = t.LastName,
+                FirstName = t.FirstName,
+                Email = t.Email,
+                Pwd = t.Pwd
+            };
+        }
+
+        public static User RegisterInfoToUser(this RegisterInfo registerInfo)
+        {
+            return new User
+            {
+                LastName = registerInfo.LastName,
+                FirstName = registerInfo.FirstName,
+                Email = registerInfo.Email,
+                Pwd = registerInfo.Pwd
             };
         }
     }

@@ -27,11 +27,12 @@ namespace DalToDo.Services
         public void Create(ToDo t)
         {
             SqlCommand cmd = connection.CreateCommand();
-            cmd.CommandText = "INSERT INTO ToDo (Titre, Description, IsDone, DateValidation) VALUES (@Titre, @Description, @IsDone, @DateValidation)";
+            cmd.CommandText = "INSERT INTO ToDo (Titre, Description, IsDone, DateValidation, UserId) VALUES (@Titre, @Description, @IsDone, @DateValidation, @UserId)";
             cmd.Parameters.AddWithValue("Titre", t.Titre);
             cmd.Parameters.AddWithValue("Description", t.Description);
             cmd.Parameters.AddWithValue("IsDone", t.IsDone);
-            cmd.Parameters.AddWithValue("DateValidation", t.DateValidation);
+            cmd.Parameters.AddWithValue("DateValidation", (object)t.DateValidation ?? DBNull.Value);
+            cmd.Parameters.AddWithValue("UserId", t.UserId);
 
             cmd.ExecuteNonQuery();
         }
@@ -60,7 +61,8 @@ namespace DalToDo.Services
                         Titre = dr["Titre"].ToString(),
                         Description = dr["Description"].ToString(),
                         IsDone = (bool)dr["IsDone"],
-                        DateValidation = (dr["DateValidation"] is DBNull) ? (DateTime?)null : (DateTime)dr["DateValidation"]
+                        DateValidation = (dr["DateValidation"] is DBNull) ? (DateTime?)null : (DateTime)dr["DateValidation"],
+                        UserId = (int)dr["UserId"]
                     });
                 }
             }
@@ -83,6 +85,7 @@ namespace DalToDo.Services
                     toDo.Description = dr["Description"].ToString();
                     toDo.IsDone = (bool)dr["IsDone"];
                     toDo.DateValidation = (dr["DateValidation"] is DBNull) ? (DateTime?)null : (DateTime)dr["DateValidation"];
+                    toDo.UserId = (int)dr["UserId"];
                 }
             }
             return toDo;
@@ -91,12 +94,13 @@ namespace DalToDo.Services
         public void Update(ToDo t)
         {
             SqlCommand cmd = connection.CreateCommand();
-            cmd.CommandText = "UPDATE ToDo SET Titre = @Titre, Description = @Description, IsDone = @IsDone, DateValidation = @DateValidation WHERE Id = @Id";
+            cmd.CommandText = "UPDATE ToDo SET Titre = @Titre, Description = @Description, IsDone = @IsDone, DateValidation = @DateValidation UserId = @UserId WHERE Id = @Id";
             cmd.Parameters.AddWithValue("Titre", t.Titre);
             cmd.Parameters.AddWithValue("Description", t.Description);
             cmd.Parameters.AddWithValue("IsDone", t.IsDone);
-            cmd.Parameters.AddWithValue("DateValidation", t.DateValidation);
+            cmd.Parameters.AddWithValue("DateValidation", (object)t.DateValidation ?? DBNull.Value);
             cmd.Parameters.AddWithValue("Id", t.Id);
+            cmd.Parameters.AddWithValue("UserId", t.UserId);
 
             cmd.ExecuteNonQuery();
         }
